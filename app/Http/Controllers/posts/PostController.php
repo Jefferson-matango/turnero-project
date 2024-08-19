@@ -28,6 +28,7 @@ class PostController extends Controller
         $post = new Post();
 
         $post->title = $request->title;
+        $post->slug = $request->slug;
         $post->category = $request->category;
         $post->content = $request->content;
 
@@ -45,6 +46,7 @@ class PostController extends Controller
     public function update(Post $post, Request $request) {
 
         $post->title = $request->title;
+        $post->slug = $request->slug;
         $post->category = $request->category;
         $post->content = $request->content;
 
