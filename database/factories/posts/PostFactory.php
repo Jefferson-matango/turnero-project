@@ -1,23 +1,19 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Posts;
 
+use App\Models\posts\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
 class PostFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Post::class;
+
     public function definition(): array
     {
         return [
             'title'=> $this->faker->sentence(),
+            'slug'=> $this->faker->slug(),
             'content'=> $this->faker->text(1000),
             'category'=> $this->faker->word(),
         ];

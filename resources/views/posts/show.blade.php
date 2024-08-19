@@ -6,9 +6,14 @@
                     <h1 class="text-center text-3xl"> {{$post->title}} </h1>
                     <hr class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">
                     <h1 class=" text-justify text-lg"> {{$post->content}} </h1>
-                    <x-secondary-button class="mt-5">
-                        <a href="{{route('posts.index')}}">Volver a posts</a>
-                    </x-secondary-button>
+                    <div class="flex flex-row">
+                        <x-primary-button class="mt-5">
+                            <a href="{{route('posts.edit', $post)}}">Editar post</a>
+                        </x-primary-button>
+                        <x-secondary-button class="mt-5 mx-10">
+                            <a href="{{route('posts.index')}}">Volver a posts</a>
+                        </x-secondary-button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -15,11 +15,23 @@
                 </div>
                 <ul class="-mt-8 p-6 font-medium text-blue-600 dark:text-blue-500">
                     @foreach ($posts as $post)
-                        <li class=" hover:underline text-lg">
-                            <a href="{{ route('posts.show', $post) }}"> {{$post->title}} </a> 
-                        </li>    
+                        <div class="flex flex-row justify-between">
+                            <li class=" hover:underline text-lg">
+                                <a href="{{ route('posts.show', $post) }}"> {{$post->title}} </a> 
+                            </li>
+                            <form action="{{route('posts.destroy', $post)}}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <x-danger-button class="mt-2 mx-12">
+                                    Eliminar
+                                </x-danger-button>
+                            </form>
+                        </div>
                     @endforeach
                 </ul>
+                <div class="-mt-6 p-5 font-medium">
+                    {{$posts->links()}}
+                </div>
             </div>
         </div>
     </div>

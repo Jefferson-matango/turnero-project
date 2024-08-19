@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index() {
-        $posts = Post::all();
+        $posts = Post::orderBy('id', 'desc')->paginate(15);
 
         return view('posts.index', compact('posts'));
     }
     
-    public function show($post) {
-        $post = Post::find($post);
+    public function show(Post $post) {
+        
         return view('posts.show', compact('post'));
     }
 
@@ -23,10 +23,41 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store() {
+    public function store(Request $request) {
         
-        return request()->all();
+        $post = new Post();
+
+        $post->title = $request->title;
+        $post->category = $request->category;
+        $post->content = $request->content;
+
+        $post->save();
+
+        return redirect()->route('posts.index');
 
     }
 
+    public function edit(Post $post) {
+
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(Post $post, Request $request) {
+
+        $post->title = $request->title;
+        $post->category = $request->category;
+        $post->content = $request->content;
+
+        $post->save();
+
+        return redirect()->route('posts.show', $post->id);
+    }
+
+    public function destroy(Post $post) {
+        
+        $post->delete();
+
+        return redirect()->route('posts.index');
+    }
 }
+
