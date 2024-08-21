@@ -52,7 +52,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return redirect()->route('posts.show', $post->id);
+        return redirect()->route('posts.show', $post);
     }
 
     public function destroy(Post $post) {

@@ -8,7 +8,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1 class="text-center text-2xl">Aqui se muestran todos los posts</h1>
+                    <div class="flex flex-row justify-between">
+                        <h1 class="mx-auto text-2xl">Aqui se muestran todos los posts</h1>
+                        <form>
+                            <x-search-input></x-search-input>
+                        </form>
+                    </div>
                     <x-primary-button class="mt-5">
                         <a href="{{route('posts.create')}}">Nuevo Post</a>
                     </x-primary-button>
@@ -16,16 +21,17 @@
                 <ul class="-mt-8 p-6 font-medium text-blue-600 dark:text-blue-500">
                     @foreach ($posts as $post)
                         <div class="flex flex-row justify-between">
-                            <li class=" hover:underline text-lg">
+                            <li class="hover:underline text-lg">
                                 <a href="{{ route('posts.show', $post) }}"> {{$post->title}} </a> 
                             </li>
-                            <form action="{{route('posts.destroy', $post)}}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <x-danger-button class="mt-2 mx-12">
-                                    Eliminar
-                                </x-danger-button>
-                            </form>
+
+                            <x-danger-button 
+                                class="mt-2 mx-12"
+                                x-data
+                                x-on:click.prevent="$dispatch('open-modal', { name: 'confirm-post-deletion', postId: {{ $post->id }} })"
+                            >
+                                Eliminar
+                            </x-danger-button>
                         </div>
                     @endforeach
                 </ul>
@@ -35,4 +41,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <x-modal name="confirm-post-deletion" focusable>
+        <form x-data="{ postUrl: '' }" x-init="
+            document.addEventListener('open-modal', (event) => {
+                if (event.detail.name === 'confirm-post-deletion') {
+                    postUrl = `/posts/${event.detail.postId}`;
+                    show = true;
+                }
+            });" 
+            :action="postUrl" method="POST" class="p-6">
+            @csrf
+            @method('DELETE')
+
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                ¿Está seguro de querer eliminar este post?
+            </h2>
+
+            <div class="mt-6 flex justify-end">
+                <x-secondary-button x-on:click.prevent="$dispatch('close-modal', 'confirm-post-deletion')">
+                    Cancelar
+                </x-secondary-button>
+
+                <x-danger-button class="ms-3">
+                    Eliminar
+                </x-danger-button>
+            </div>
+        </form>
+    </x-modal>
 </x-app-layout>
