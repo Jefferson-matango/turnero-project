@@ -12,24 +12,28 @@
                         @method('PUT')
                         <div>
                             <x-input-label for="title" value="Titulo" >Titulo</x-input-label>
-                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" value="{{$post->title}}" required/>
+                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" value="{{old('title', $post->title)}}" required/>
+                            <x-input-error :messages="$errors->updatePost->get('title')" class="mt-2" />
                         </div>
                         
                         <div class="mt-3">
                             <x-input-label for="slug" value="Slug" />
-                            <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full" value="{{$post->slug}}" />
+                            <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full" value="{{old('slug', $post->slug)}}" />
+                            <x-input-error :messages="$errors->updatePost->get('slug')" class="mt-2" />
                         </div>
 
                         <div class="mt-3">
                             <x-input-label for="category" value="Categoria" />
-                            <x-text-input id="category" name="category" type="text" class="mt-1 block w-full" value="{{$post->category}}" />
+                            <x-text-input id="category" name="category" type="text" class="mt-1 block w-full" value="{{old('category', $post->category)}}" />
+                            <x-input-error :messages="$errors->updatePost->get('category')" class="mt-2" />
                         </div>
                         
                         <div class="mt-3 mb-5">
                             <x-input-label>
                                 Descripción
-                                <x-text-area name="content" rows="4" placeholder="Describe tu post" class="mt-1">{{$post->content}}</x-text-area>
+                                <x-text-area name="content" rows="4" placeholder="Describe tu post" class="mt-1">{{old('content', $post->content)}}</x-text-area>
                             </x-input-label>
+                            <x-input-error :messages="$errors->updatePost->get('content')" class="mt-2" />
                         </div>
                         <x-primary-button>
                             Editar

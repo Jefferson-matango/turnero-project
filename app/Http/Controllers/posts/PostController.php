@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\posts;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PostCreateMail;
 use App\Models\posts\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -24,18 +26,19 @@ class PostController extends Controller
     }
 
     public function store(Request $request) {
-        
-        $post = new Post();
 
-        $post->title = $request->title;
-        $post->slug = $request->slug;
-        $post->category = $request->category;
-        $post->content = $request->content;
+        $request->validateWithBag('createPost',[
+            'title'=> 'required|min:3',
+            'slug'=>['required', 'max:255' ,'unique:'.Post::class ],
+            'category'=>'required|min:3',
+            'content'=>'required|min:3',
+        ]);
 
-        $post->save();
+        $post = Post::create($request->all());
+
+        Mail::to('prueba@prueba.com')->send(new PostCreateMail($post));
 
         return redirect()->route('posts.index');
-
     }
 
     public function edit(Post $post) {
@@ -44,13 +47,15 @@ class PostController extends Controller
     }
 
     public function update(Post $post, Request $request) {
+        $request->validateWithBag('updatePost',[
+            'title'=> 'required|min:3',
+            'slug'=>"required|unique:posts,slug,{$post->id}",
+            'category'=>'required|min:3',
+            'content'=>'required|min:3',
 
-        $post->title = $request->title;
-        $post->slug = $request->slug;
-        $post->category = $request->category;
-        $post->content = $request->content;
+        ]);
 
-        $post->save();
+        $post->update($request->all());
 
         return redirect()->route('posts.show', $post);
     }

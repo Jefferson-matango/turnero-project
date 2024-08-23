@@ -9,6 +9,10 @@ class Post extends Model
 {
     use HasFactory;
 
+    protected $guarded = [
+        'is_active',
+    ];
+    
     public function getRouteKeyName()
     {
         return 'id';
